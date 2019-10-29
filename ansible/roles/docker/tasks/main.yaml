@@ -1,0 +1,24 @@
+- name: add Docker deb key
+  become: true # Become has the task run as sudo on the host
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+    state: present # Present has ansible check that this has be done
+
+- name: add Docker Ubuntu repo
+  apt_repository:
+    repo: "deb https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+    update_cache: yes
+    state: present
+
+- name: install Docker
+  apt:
+    name: docker-ce
+    state: present
+
+- name: Install Python docker module
+  become: yes
+  apt:
+    name:
+      - python3-docker
+    state: present

@@ -1,0 +1,25 @@
+version: '3.6'
+
+services:
+  mongodb:
+    image: mongo:latest
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=dbuser
+      - MONGO_INITDB_ROOT_PASSWORD=changeme
+    ports:
+      - 27017:27017
+    volumes:
+      - './mongo-data:/data/db'
+
+  simple_app:
+    image: simple_app:lastest
+    environment:
+        - DB_USER=dbuser
+        - DB_PASS=changeme
+    build:
+        context: ./
+        dockerfile: ./docker/Dockerfile
+    ports:
+      - 9999:9999
+    depends_on:
+      - mongodb

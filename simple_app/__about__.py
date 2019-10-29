@@ -1,0 +1,7 @@
+__version__='1.0.0'
+__author__='Duncan Eddy'
+__author_email__='duncan.eddy@gmail.com'
+__maintainer__='Duncan Eddy'
+__maintainer_email__='duncan.eddy@gmail.com'
+__description__='Simple Python API application'
+__url__='https://github.com/duncaneddy/simple_python_application'

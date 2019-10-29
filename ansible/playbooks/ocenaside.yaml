@@ -1,0 +1,9 @@
+- hosts: bethpage
+  roles:
+    # Uncomment this if you can run Sudo
+    # - role: docker
+    #   tags:
+    #     - docker
+    - role: simple_app
+      tags:
+        - simple_app
