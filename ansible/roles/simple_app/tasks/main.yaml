@@ -1,16 +1,16 @@
 - name: Clone Application
   git:
-    repo: https://github.com/duncaneddy/simple_python_application.git
+    repo: git@github.com:duncaneddy/simple_python_application.git
     dest: ~/ansible_deploy/simple_python_application
 
 - name: Install Application
-  shell: python3 install -e .
+  shell: pip3 install -e .
   args:
-    chdir: ~/ansible_deploy
+    chdir: ~/ansible_deploy/simple_python_application
 
 - name: Run Application
-  shell: python3 ./simple_app/app.py
+  shell: nohup python3 ./simple_app/app.py &
   args:
-    chdir: ~/ansible_deploy
+    chdir: ~/ansible_deploy/simple_python_application
   environment:
     APP_SECRET: "{{ app_secret }}"

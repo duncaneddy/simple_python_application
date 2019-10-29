@@ -12,7 +12,7 @@ from starlette.responses import FileResponse
 from simple_app.models import LabMember, ApplicationSecret
 
 # Create API Application
-api = fastapi.FastAPI()
+api = fastapi.FastAPI(version='1.0.0', description='A Simple API Application')
 
 # Add logo, because it's cool
 api.mount('/static/', StaticFiles(directory=pathlib.Path(__file__).parent / 'static'))

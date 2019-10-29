@@ -1,0 +1,5 @@
+- hosts: sisl
+  roles:
+    - role: simple_app
+      tags:
+        - simple_app

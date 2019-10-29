@@ -1,6 +1,8 @@
 # Simple Python Application
 
-This is a simple python application that demonstrates a few useful things
+This is a simple python application that demonstrates a few useful things in
+application development. Namely containerization of software through Docker,
+management of secrets through SOPS, and automated deployment through Ansible.
 
 ## Installation - MacOS
 
@@ -31,7 +33,7 @@ to be installed. This installation procedure assumes you have Homebrew installed
 
 1. Install SOPS: `brew install sops`
 2. Install GPG: `brew install gnupg`
-3. Import the private key for this application (stored in `private_key.asc`), using `gpg --import private_key.asc` **THIS SHOULD NEVER BE DISTRIBTED OVER PUBLIC CHANNELS**
+3. Import the private key for this application (stored in `private_key.asc`), using `gpg --import private_key.asc` **THIS SHOULD NEVER BE DISTRIBTED OVER PUBLIC CHANNELS. IT IS ONLY INCLUDED HERE FOR EDUCATIONAL PURPOSES**
 4. If you type `gpg --list-keys` You should now see one gpg key ring with matching public key `320C88205B1AC22D31898E46E5D110DA929FC7F6`. 
 5. Next add the following lines to your shell profile:
 ```
@@ -41,13 +43,24 @@ export GPG_TTY
 ```
 6. Reload the shell from source: `source ~/.bash_profile` or `source ~/.zshrc`
 
-## Run The Application Locally
+## Using the Tools
+
+### Run Application Locally
 
 1. Install application as application `pip3 install -e .`
 2. Run locally: `python3 ./simple_app/app.py`
 3. Navigate your browser to [localhost:9999](localhost:9999)
+4. Read the documentation at: [localhost:9999/redoc](localhost:9999/redoc)
+5. And interact with the API online at: [localhost:9999/docs](localhost:9999/docs)
 
-## Run Ansible Playbook
+### Manage Secrets
+
+1. Change into ansible directory of the repository: `cd ansible`
+2. Decrypt secret variables with `make decrypt`
+3. Make any changes to secret variables in host_vars.
+4. Reencrypt secrets with `make encrypt`
+
+### Deploy Ansible Playbook
 
 First, we need to create variables file to store personal credital information 
 (username, ssh key file, sudo-user password). Create the file `./ansible/secret-vars.yaml`,
@@ -64,3 +77,21 @@ ansible_become_password: SUDO_PASSWORD # Password for assuming SSH role
 3. Run playbook for a specific server: `ansible-playbook playbooks/bethpage.yaml -e @secret-vars.yaml`
 4. Run playbook for a all servers: `ansible-playbook hosts.yaml -e @secret-vars.yaml`
 5. If changes were made to secret variables run `make encrypt` to reencrypt the changes before committing.
+
+Note because this test repo doesn't assume super-user privilidges (and therefore
+is not installing or running docker) it runs the application in a detached process.
+This detached process requires cleanup afterwards. To find the process run `ps -ef |grep nohup`. 
+Then use `kill PID` to remove the resulting process.
+
+### Test the Deployment
+
+If running directly on the deployment machine:
+   1. `curl -X GET localhost:9999/members` to see current lab memebers
+   2. `curl -X POST -H 'Content-Type: application/json' -d '{"first": "duncan", "last": "eddy", "year": 4}' localhost:9999/members` to add a lab member to the database
+   3. `curl -X GET localhost:9999/members` to see the effect of the addition
+   4. `curl -X GET localhost:9999/secret` to get the secret variable of the deployment.
+
+If running locally using and SSH tunnel by using `ssh USER@SERVER CURL_COMMAND -o -`.
+And example of this usage is:
+
+`ssh deddy@bethpage curl -X GET localhost:9999/members -o -`
