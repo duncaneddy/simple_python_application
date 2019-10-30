@@ -25,17 +25,17 @@ async def root():
 ## Setup Databae Connection
 
 # Setup database connection (Uncomment if database can be run)
-try:
-    client = pymongo.MongoClient(host='localhost',
-        username=os.environ['DB_USER'],
-        password=os.environ['DB_PASS'],
-        authSource='admin',
-        authMechanism='SCRAM-SHA-256'
-    )
-except:
-    raise RuntimeError('Failed to initialize database connection')
+# try:
+#     client = pymongo.MongoClient(host='localhost',
+#         username=os.environ['DB_USER'],
+#         password=os.environ['DB_PASS'],
+#         authSource='admin',
+#         authMechanism='SCRAM-SHA-256'
+#     )
+# except:
+#     raise RuntimeError('Failed to initialize database connection')
 
-# client = mongomock.MongoClient().app_db # <-- Use if fake DB connection needed
+client = mongomock.MongoClient().app_db # <-- Use if fake DB connection needed
 
 ## Declare Routes
 @api.get("/members", response_model=typing.List[LabMember])
