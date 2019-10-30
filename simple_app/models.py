@@ -1,3 +1,6 @@
+'''The models module contains data types and models that structure the API
+methods and respones.
+'''
 import enum
 import pydantic
 

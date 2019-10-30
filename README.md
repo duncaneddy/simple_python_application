@@ -53,14 +53,37 @@ export GPG_TTY
 4. Read the documentation at: [localhost:9999/redoc](localhost:9999/redoc)
 5. And interact with the API online at: [localhost:9999/docs](localhost:9999/docs)
 
+### Run Locally with Docker
+
+You can build and run the application locally within docker containers to
+test how docker and a containerized deployment might work.
+
+The the container build process is specified in what is called a Dockerfile that
+lives in `./docker/Dockerfile`. This is the "recipe" used to define what the 
+machine inside the container looks like and what it does at start-up.
+
+There is also a `docker-compose.yml` file at the root level that mimics 
+what a deployment might look like locally. It uses a pre-made container for a
+MongoDB database to support the application and a single API application.
+
+To build the container and then run the application you need to:
+1. Have Docker and Docker Compose installed.
+2. Build the docker container (uncomment the database connection) with `docker-compose build`
+3. Pull the mongodb container with `docker-compose pull`
+4. Start the database and application locally with `docker-compose up`
+5. When finished exit with `Ctrl-C` or `docker-compose down` in a different terminal.
+
 ### Manage Secrets
 
 1. Change into ansible directory of the repository: `cd ansible`
-2. Decrypt secret variables with `make decrypt`
+2. Decrypt secret variables with `make decrypt`. The password is `simple_app`
 3. Make any changes to secret variables in host_vars.
 4. Reencrypt secrets with `make encrypt`
 
 ### Deploy Ansible Playbook
+
+For more information on Ansible and how it works read the in-code description:
+[here](./ansible/README.md).
 
 First, we need to create variables file to store personal credital information 
 (username, ssh key file, sudo-user password). Create the file `./ansible/secret-vars.yaml`,
